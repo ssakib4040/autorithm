@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
+  const { user } = useAuth();
+
   return (
     <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,12 +47,21 @@ export default function Header() {
               Contact
             </Link>
 
-            <Link
-              href="/login"
-              className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
-            >
-              Get Custom Automation
-            </Link>
+            {user ? (
+              <Link
+                href="/profile"
+                className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
+              >
+                My Account
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>
