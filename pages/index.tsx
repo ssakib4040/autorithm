@@ -65,13 +65,13 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="#products"
+                  href="/products"
                   className="px-8 py-4 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors text-center"
                 >
                   Browse Automation Kits
                 </Link>
                 <Link
-                  href="#contact"
+                  href="/contact"
                   className="px-8 py-4 rounded-lg border-2 border-zinc-900 dark:border-white text-zinc-900 dark:text-white font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-center"
                 >
                   Get Custom Automation
