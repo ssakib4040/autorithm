@@ -1,5 +1,5 @@
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 import { Geist } from "next/font/google";
 
 const geistSans = Geist({
@@ -398,7 +398,7 @@ export default function Products() {
             Need Something Custom?
           </h2>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
-            Can't find exactly what you need? We build bespoke automation
+            Can&apos;t find exactly what you need? We build bespoke automation
             systems tailored to your specific requirements.
           </p>
           <Link
