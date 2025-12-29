@@ -3,297 +3,19 @@ import Link from "next/link";
 import { Geist } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getProductDetail } from "@/data/products";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-// Product database (in a real app, this would come from an API/database)
-const productsData: { [key: string]: Product } = {
-  "1": {
-    id: "1",
-    name: "AI Lead Enrichment System",
-    headline:
-      "Transform cold leads into qualified prospects with AI-powered intelligence",
-    description:
-      "Automatically research, score, and enrich every lead that enters your pipeline. This automation uses GPT-4 to gather company information, assess fit, and prioritize your outreach—saving hours of manual research.",
-    tool: "n8n",
-    category: "CRM",
-    price: 149,
-    steps: [
-      "Lead enters your CRM or form",
-      "System extracts company domain and contact info",
-      "AI researches company website, LinkedIn, and public data",
-      "GPT-4 analyzes fit based on your ICP criteria",
-      "Lead score calculated and assigned",
-      "Enriched data written back to CRM",
-      "Slack notification sent to sales team for hot leads",
-    ],
-    included: [
-      "n8n workflow JSON file",
-      "Complete setup guide (PDF)",
-      "Video walkthrough",
-      "API integration documentation",
-      "Customization instructions",
-      "30-day email support",
-    ],
-    forWho: [
-      "B2B sales teams with high lead volume",
-      "Companies using CRMs like HubSpot, Pipedrive, or Salesforce",
-      "Teams that need to prioritize outreach efficiently",
-      "Businesses with defined ideal customer profiles",
-    ],
-    notFor: [
-      "B2C businesses with individual consumers",
-      "Companies without a CRM system",
-      "Teams that prefer 100% manual lead qualification",
-      "Businesses with very low lead volume (<10/week)",
-    ],
-    technicalDetails: {
-      apis: ["OpenAI GPT-4", "Clearbit API", "HubSpot API", "Slack API"],
-      triggers: [
-        "Webhook (CRM form submission)",
-        "Scheduled polling",
-        "Manual trigger",
-      ],
-      assumptions: [
-        "You have an OpenAI API key",
-        "Your CRM has API access",
-        "Leads include company domain or email",
-        "You have defined ICP criteria",
-      ],
-    },
-    faqs: [
-      {
-        question: "What CRMs does this work with?",
-        answer:
-          "The automation is built for n8n, which connects to 400+ apps. It works out-of-the-box with HubSpot, Pipedrive, and Salesforce. We include instructions for adapting to other CRMs.",
-      },
-      {
-        question: "How much does the AI research cost?",
-        answer:
-          "GPT-4 API costs approximately $0.03-0.05 per lead enrichment. For 1,000 leads/month, expect ~$30-50 in OpenAI costs.",
-      },
-      {
-        question: "Can I customize the scoring criteria?",
-        answer:
-          "Yes. The workflow includes a configuration node where you define your ideal customer profile. The setup guide walks you through customization.",
-      },
-      {
-        question: "Do I need technical skills to set this up?",
-        answer:
-          "Basic technical knowledge is helpful. If you can follow documentation and configure API keys, you'll be fine. The setup guide is written for non-developers.",
-      },
-      {
-        question: "What if I get stuck during setup?",
-        answer:
-          "Every purchase includes 30 days of email support. We'll help you get it running.",
-      },
-    ],
-  },
-  "2": {
-    id: "2",
-    name: "SaaS Onboarding Orchestrator",
-    headline:
-      "Guide new users from signup to activation with automated email sequences and task tracking",
-    description:
-      "A complete user onboarding system that sends personalized email sequences, tracks user progress, and triggers interventions when users get stuck. Built to increase activation rates and reduce churn.",
-    tool: "Make",
-    category: "SaaS Ops",
-    price: 199,
-    steps: [
-      "User signs up for your SaaS product",
-      "Onboarding sequence initialized in Make",
-      "Welcome email sent immediately",
-      "User activity tracked (login, feature usage, etc.)",
-      "Conditional emails sent based on progress",
-      "Stuck users flagged and sales team notified",
-      "Success metrics logged to analytics dashboard",
-    ],
-    included: [
-      "Make.com scenario blueprint",
-      "Email templates (5 onboarding emails)",
-      "Complete setup guide (PDF + Video)",
-      "Analytics dashboard setup",
-      "Customization guide",
-      "60-day email support",
-    ],
-    forWho: [
-      "SaaS companies with self-serve signups",
-      "Product teams focused on activation metrics",
-      "Businesses using email marketing platforms",
-      "Companies that want to automate user journeys",
-    ],
-    notFor: [
-      "Enterprise sales with manual onboarding",
-      "Products without clear activation milestones",
-      "Companies without email infrastructure",
-      "Pure content websites (not SaaS)",
-    ],
-    technicalDetails: {
-      apis: [
-        "Stripe API",
-        "SendGrid/Mailgun",
-        "Segment",
-        "Intercom",
-        "Google Sheets",
-      ],
-      triggers: [
-        "Webhook (user signup)",
-        "Scheduled checks (hourly)",
-        "User activity events",
-      ],
-      assumptions: [
-        "You can send webhooks from your app",
-        "You have an email service provider",
-        "User data includes email and signup timestamp",
-        "You've defined activation milestones",
-      ],
-    },
-    faqs: [
-      {
-        question: "What email service does this work with?",
-        answer:
-          "The automation works with SendGrid, Mailgun, Postmark, or any ESP with an API. We provide examples for the most popular services.",
-      },
-      {
-        question: "Can I customize the email sequence?",
-        answer:
-          "Absolutely. We provide 5 template emails, but you can edit the copy, add/remove emails, and adjust timing completely.",
-      },
-      {
-        question: "How do you track user progress?",
-        answer:
-          "The workflow listens for webhooks or polls your database. You send events like 'user_logged_in' or 'feature_used', and the automation updates their journey state.",
-      },
-      {
-        question: "Does this work with Intercom or other tools?",
-        answer:
-          "Yes. Make.com integrates with 1,500+ apps. We show you how to connect Intercom, Segment, Mixpanel, and more.",
-      },
-      {
-        question: "What if our onboarding flow is complex?",
-        answer:
-          "The blueprint handles multi-step journeys with branches and conditions. For very complex flows, we offer customization services.",
-      },
-    ],
-  },
-  "3": {
-    id: "3",
-    name: "E-commerce Order Pipeline",
-    headline:
-      "Process orders, manage inventory, and sync across platforms automatically",
-    description:
-      "End-to-end order processing automation that handles everything from order receipt to fulfillment tracking. Syncs inventory across Shopify, WooCommerce, and your warehouse system.",
-    tool: "n8n",
-    category: "E-commerce",
-    price: 179,
-    steps: [
-      "Order received from Shopify/WooCommerce",
-      "Payment verification check",
-      "Inventory levels updated across all platforms",
-      "Order details sent to fulfillment system",
-      "Shipping label generated automatically",
-      "Customer receives tracking email",
-      "Low inventory alerts sent when needed",
-    ],
-    included: [
-      "n8n workflow JSON file",
-      "Multi-platform setup guide",
-      "Video walkthrough (45 minutes)",
-      "Inventory sync documentation",
-      "Error handling guide",
-      "90-day email support",
-    ],
-    forWho: [
-      "E-commerce businesses selling on multiple platforms",
-      "Shops with complex inventory management needs",
-      "Businesses using third-party fulfillment",
-      "Companies wanting to reduce manual order processing",
-    ],
-    notFor: [
-      "Single-product businesses with simple workflows",
-      "Companies without inventory management systems",
-      "Businesses selling only digital products",
-      "Stores with <50 orders per month",
-    ],
-    technicalDetails: {
-      apis: [
-        "Shopify API",
-        "WooCommerce API",
-        "ShipStation API",
-        "SendGrid",
-        "Google Sheets",
-      ],
-      triggers: [
-        "Webhook (new order)",
-        "Inventory level changes",
-        "Manual trigger",
-      ],
-      assumptions: [
-        "You have API access to your e-commerce platform",
-        "Inventory system has API or spreadsheet export",
-        "You use a shipping platform with API access",
-        "Order volumes justify automation",
-      ],
-    },
-    faqs: [
-      {
-        question: "Which e-commerce platforms are supported?",
-        answer:
-          "Out of the box: Shopify and WooCommerce. The workflow can be adapted for BigCommerce, Magento, or any platform with webhook support.",
-      },
-      {
-        question: "How does inventory syncing work?",
-        answer:
-          "When an order is placed on any platform, the workflow updates inventory counts everywhere. You set a master source (like your warehouse system) and it propagates changes.",
-      },
-      {
-        question: "Can this integrate with my fulfillment center?",
-        answer:
-          "If your fulfillment center has an API or accepts orders via email/CSV, yes. We provide examples for ShipStation, ShipBob, and custom integrations.",
-      },
-      {
-        question: "What happens if payment fails?",
-        answer:
-          "The workflow includes payment verification and error handling. Failed payments trigger notifications and don't proceed to fulfillment.",
-      },
-      {
-        question: "Do you support international shipping?",
-        answer:
-          "Yes. The workflow handles multiple currencies and shipping zones. You configure your rules during setup.",
-      },
-    ],
-  },
-};
-
-interface Product {
-  id: string;
-  name: string;
-  headline: string;
-  description: string;
-  tool: string;
-  category: string;
-  price: number;
-  steps: string[];
-  included: string[];
-  forWho: string[];
-  notFor: string[];
-  technicalDetails: {
-    apis: string[];
-    triggers: string[];
-    assumptions: string[];
-  };
-  faqs: Array<{ question: string; answer: string }>;
-}
-
 export default function ProductDetails() {
   const router = useRouter();
   const { id } = router.query;
 
-  // Get product data
-  const product = id ? productsData[id as string] : null;
+  // Get product data from centralized source
+  const product = id ? getProductDetail(id as string) : null;
 
   // Loading state
   if (!router.isReady) {
@@ -468,12 +190,23 @@ export default function ProductDetails() {
             {product.steps.map((step, index) => (
               <div key={index} className="flex gap-4 items-start">
                 <div className="shrink-0 w-8 h-8 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center font-bold text-sm">
-                  {index + 1}
+                  {typeof step === "string" ? index + 1 : step.number}
                 </div>
                 <div className="flex-1 pt-1">
-                  <p className="text-lg text-zinc-700 dark:text-zinc-300">
-                    {step}
-                  </p>
+                  {typeof step === "string" ? (
+                    <p className="text-lg text-zinc-700 dark:text-zinc-300">
+                      {step}
+                    </p>
+                  ) : (
+                    <>
+                      <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-1">
+                        {step.title}
+                      </h3>
+                      <p className="text-zinc-600 dark:text-zinc-400">
+                        {step.description}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

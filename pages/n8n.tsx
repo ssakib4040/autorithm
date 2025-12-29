@@ -2,60 +2,15 @@ import Link from "next/link";
 import { Geist } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getProductsByTool } from "@/data/products";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-// n8n products
-const n8nProducts = [
-  {
-    id: 1,
-    name: "AI Lead Enrichment System",
-    description:
-      "Automatically enrich leads with AI-powered research and scoring",
-    price: 149,
-    slug: "1",
-  },
-  {
-    id: 3,
-    name: "E-commerce Order Pipeline",
-    description: "Process orders, manage inventory, and sync across platforms",
-    price: 179,
-    slug: "3",
-  },
-  {
-    id: 4,
-    name: "CRM Data Sync Engine",
-    description: "Keep your CRM in perfect sync with all connected tools",
-    price: 129,
-    slug: "4",
-  },
-  {
-    id: 7,
-    name: "Multi-Channel Support Router",
-    description:
-      "Route and manage support tickets across platforms intelligently",
-    price: 159,
-    slug: "7",
-  },
-  {
-    id: 10,
-    name: "Inventory Sync System",
-    description:
-      "Real-time inventory synchronization across all sales channels",
-    price: 169,
-    slug: "10",
-  },
-  {
-    id: 13,
-    name: "Payment Processing Hub",
-    description: "Unified payment handling across multiple providers",
-    price: 189,
-    slug: "13",
-  },
-];
+// Get n8n products from centralized data
+const n8nProducts = getProductsByTool("n8n").slice(0, 6);
 
 export default function N8nPage() {
   return (
@@ -66,7 +21,7 @@ export default function N8nPage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-linear-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center max-w-4xl mx-auto">
@@ -361,7 +316,7 @@ export default function N8nPage() {
                 Why Most n8n Workflows Fail
               </h2>
               <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-8">
-                n8n's power is a double-edged sword. Without proper
+                n8n&apos;s power is a double-edged sword. Without proper
                 architecture, workflows become unmaintainable quickly.
               </p>
             </div>
@@ -423,7 +378,7 @@ export default function N8nPage() {
                       No Modularity
                     </h3>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      Monolithic workflows that can't be reused or tested
+                      Monolithic workflows that can&apos;t be reused or tested
                       independently
                     </p>
                   </div>

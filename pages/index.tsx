@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getFeaturedProducts } from "@/data/products";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,55 +14,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Sample product data
-const featuredProducts = [
-  {
-    id: 1,
-    name: "AI Lead Enrichment System",
-    description:
-      "Automatically enrich leads with AI-powered research and scoring",
-    tool: "n8n",
-    price: "$149",
-  },
-  {
-    id: 2,
-    name: "SaaS Onboarding Orchestrator",
-    description:
-      "Complete user onboarding workflow with email sequences and task tracking",
-    tool: "Make",
-    price: "$199",
-  },
-  {
-    id: 3,
-    name: "E-commerce Order Pipeline",
-    description: "Process orders, manage inventory, and sync across platforms",
-    tool: "n8n",
-    price: "$179",
-  },
-  {
-    id: 4,
-    name: "Support Ticket Intelligence",
-    description:
-      "AI-powered ticket classification, routing, and response generation",
-    tool: "Make",
-    price: "$169",
-  },
-  {
-    id: 5,
-    name: "Content Distribution Engine",
-    description:
-      "Multi-channel content publishing with scheduling and analytics",
-    tool: "n8n",
-    price: "$139",
-  },
-  {
-    id: 6,
-    name: "Sales Pipeline Automator",
-    description: "CRM sync, follow-up sequences, and deal tracking automation",
-    tool: "Make",
-    price: "$189",
-  },
-];
+// Get featured products
+const featuredProducts = getFeaturedProducts(6);
 
 const useCases = [
   {
@@ -552,7 +506,7 @@ export default function Home() {
                     {product.tool}
                   </span>
                   <span className="text-2xl font-bold text-zinc-900 dark:text-white">
-                    {product.price}
+                    ${product.price}
                   </span>
                 </div>
                 <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">

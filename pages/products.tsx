@@ -3,144 +3,12 @@ import { useState } from "react";
 import { Geist } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { allProducts } from "@/data/products";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
-// Product data
-const allProducts = [
-  {
-    id: 1,
-    name: "AI Lead Enrichment System",
-    description:
-      "Automatically enrich leads with AI-powered research and scoring",
-    tool: "n8n",
-    category: "CRM",
-    price: 149,
-  },
-  {
-    id: 2,
-    name: "SaaS Onboarding Orchestrator",
-    description:
-      "Complete user onboarding workflow with email sequences and task tracking",
-    tool: "Make",
-    category: "SaaS Ops",
-    price: 199,
-  },
-  {
-    id: 3,
-    name: "E-commerce Order Pipeline",
-    description: "Process orders, manage inventory, and sync across platforms",
-    tool: "n8n",
-    category: "E-commerce",
-    price: 179,
-  },
-  {
-    id: 4,
-    name: "Support Ticket Intelligence",
-    description:
-      "AI-powered ticket classification, routing, and response generation",
-    tool: "Make",
-    category: "AI",
-    price: 169,
-  },
-  {
-    id: 5,
-    name: "Content Distribution Engine",
-    description:
-      "Multi-channel content publishing with scheduling and analytics",
-    tool: "n8n",
-    category: "Marketing",
-    price: 139,
-  },
-  {
-    id: 6,
-    name: "Sales Pipeline Automator",
-    description: "CRM sync, follow-up sequences, and deal tracking automation",
-    tool: "Make",
-    category: "CRM",
-    price: 189,
-  },
-  {
-    id: 7,
-    name: "Email Campaign Orchestrator",
-    description:
-      "Automated email sequences with engagement tracking and list management",
-    tool: "n8n",
-    category: "Marketing",
-    price: 159,
-  },
-  {
-    id: 8,
-    name: "Webhook Processing Hub",
-    description:
-      "Centralized webhook receiver with validation, routing, and error handling",
-    tool: "Make",
-    category: "Webhooks",
-    price: 129,
-  },
-  {
-    id: 9,
-    name: "Customer Feedback Analyzer",
-    description:
-      "Collect, analyze, and route customer feedback with AI sentiment analysis",
-    tool: "n8n",
-    category: "AI",
-    price: 169,
-  },
-  {
-    id: 10,
-    name: "Invoice Processing System",
-    description: "Automated invoice generation, sending, and payment tracking",
-    tool: "Make",
-    category: "SaaS Ops",
-    price: 149,
-  },
-  {
-    id: 11,
-    name: "Social Media Sync Hub",
-    description: "Cross-post content to multiple platforms with optimal timing",
-    tool: "n8n",
-    category: "Marketing",
-    price: 139,
-  },
-  {
-    id: 12,
-    name: "Data Backup Orchestrator",
-    description:
-      "Automated backups across services with verification and notifications",
-    tool: "Make",
-    category: "Webhooks",
-    price: 119,
-  },
-  {
-    id: 13,
-    name: "Appointment Scheduling System",
-    description:
-      "Automated scheduling with calendar sync and reminder notifications",
-    tool: "n8n",
-    category: "SaaS Ops",
-    price: 159,
-  },
-  {
-    id: 14,
-    name: "Product Launch Coordinator",
-    description: "Coordinate launches across teams, tools, and channels",
-    tool: "Make",
-    category: "Marketing",
-    price: 179,
-  },
-  {
-    id: 15,
-    name: "Customer Onboarding Flow",
-    description: "Automated customer journey from signup to first value",
-    tool: "n8n",
-    category: "CRM",
-    price: 169,
-  },
-];
 
 const categories = [
   "All",
@@ -150,6 +18,10 @@ const categories = [
   "AI",
   "Webhooks",
   "E-commerce",
+  "Support",
+  "Analytics",
+  "Document Management",
+  "Finance",
 ];
 const tools = ["All", "n8n", "Make"];
 

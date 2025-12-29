@@ -2,60 +2,15 @@ import Link from "next/link";
 import { Geist } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getProductsByTool } from "@/data/products";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-// Make.com products
-const makeProducts = [
-  {
-    id: 2,
-    name: "SaaS Onboarding Orchestrator",
-    description:
-      "Complete user onboarding workflow with email sequences and task tracking",
-    price: 199,
-    slug: "2",
-  },
-  {
-    id: 5,
-    name: "Marketing Campaign Automator",
-    description:
-      "Multi-channel campaign orchestration with performance tracking",
-    price: 139,
-    slug: "5",
-  },
-  {
-    id: 6,
-    name: "Social Media Scheduler Pro",
-    description: "Content scheduling and publishing across all major platforms",
-    price: 119,
-    slug: "6",
-  },
-  {
-    id: 8,
-    name: "Client Reporting System",
-    description:
-      "Automated report generation and delivery for client dashboards",
-    price: 149,
-    slug: "8",
-  },
-  {
-    id: 11,
-    name: "Lead Scoring Pipeline",
-    description: "Intelligent lead qualification and routing based on behavior",
-    price: 139,
-    slug: "11",
-  },
-  {
-    id: 14,
-    name: "Content Distribution Hub",
-    description: "One-click content syndication across multiple platforms",
-    price: 129,
-    slug: "14",
-  },
-];
+// Get Make.com products from centralized data
+const makeProducts = getProductsByTool("Make").slice(0, 6);
 
 export default function MakePage() {
   return (
@@ -66,7 +21,7 @@ export default function MakePage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-linear-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="text-center max-w-4xl mx-auto">
@@ -392,7 +347,7 @@ export default function MakePage() {
                 Common Make Mistakes
               </h2>
               <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-8">
-                Make's ease of use can be deceptive. Without discipline,
+                Make&apos;s ease of use can be deceptive. Without discipline,
                 scenarios become unmaintainable fast.
               </p>
             </div>
@@ -483,7 +438,7 @@ export default function MakePage() {
             </div>
 
             <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
-              Autorithm's Make Approach
+              Autorithm&apos;s Make Approach
             </h2>
             <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto">
               We build Make scenarios with the same rigor as production software
