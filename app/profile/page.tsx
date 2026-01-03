@@ -5,21 +5,36 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function Profile() {
-  const [user, setUser] = useState<any>(null);
-  const router = useRouter();
+interface User {
+  email: string;
+  name: string;
+  isAdmin?: boolean;
+}
 
-  useEffect(() => {
+export default function Profile() {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === "undefined") return null;
+
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
 
     if (!token || !userData) {
-      router.push("/login");
-      return;
+      return null;
     }
 
-    setUser(JSON.parse(userData));
-  }, [router]);
+    try {
+      return JSON.parse(userData) as User;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user, router]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

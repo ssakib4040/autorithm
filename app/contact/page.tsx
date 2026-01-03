@@ -13,7 +13,7 @@ export default function Contact() {
               Get In Touch
             </h1>
             <p className="text-xl text-zinc-600 dark:text-zinc-400">
-              Have questions? Need custom automation? Let's talk.
+              Have questions? Need custom automation? Let&apos;s talk.
             </p>
           </div>
 

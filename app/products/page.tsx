@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { productsApi } from "@/utils/api";
@@ -29,45 +26,69 @@ interface Product {
   slug: string;
 }
 
-export default function Products() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedTool, setSelectedTool] = useState("All");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [priceRange, setPriceRange] = useState("All");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+interface ProductsPageProps {
+  searchParams: Promise<{
+    tool?: string;
+    category?: string;
+    priceRange?: string;
+    page?: string;
+  }>;
+}
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const params: any = { page, limit: 12 };
+export default async function Products({ searchParams }: ProductsPageProps) {
+  const params = await searchParams;
+  const selectedTool = params.tool || "All";
+  const selectedCategory = params.category || "All";
+  const priceRange = params.priceRange || "All";
+  const page = parseInt(params.page || "1", 10);
 
-        if (selectedTool !== "All") params.tool = selectedTool;
-        if (selectedCategory !== "All") params.category = selectedCategory;
+  // Build API params
+  const apiParams: Record<string, string | number> = { page, limit: 12 };
 
-        if (priceRange === "0-150") {
-          params.maxPrice = 150;
-        } else if (priceRange === "150-200") {
-          params.minPrice = 150;
-          params.maxPrice = 200;
-        } else if (priceRange === "200+") {
-          params.minPrice = 200;
-        }
+  if (selectedTool !== "All") apiParams.tool = selectedTool;
+  if (selectedCategory !== "All") apiParams.category = selectedCategory;
 
-        const data = await productsApi.getAll(params);
-        setProducts(data.products);
-        setTotalPages(data.totalPages);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
+  if (priceRange === "0-150") {
+    apiParams.maxPrice = 150;
+  } else if (priceRange === "150-200") {
+    apiParams.minPrice = 150;
+    apiParams.maxPrice = 200;
+  } else if (priceRange === "200+") {
+    apiParams.minPrice = 200;
+  }
+
+  let products: Product[] = [];
+  let totalPages = 1;
+
+  try {
+    const data = await productsApi.getAll(apiParams);
+    products = data.products || [];
+    totalPages = data.totalPages || 1;
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
+    // Products will remain empty array, showing "No products found" message
+  }
+
+  // Helper to build query string
+  const buildQueryString = (updates: Record<string, string>) => {
+    const newParams = new URLSearchParams();
+    const current = {
+      tool: selectedTool,
+      category: selectedCategory,
+      priceRange,
+      page: page.toString(),
     };
+    const merged = { ...current, ...updates };
 
-    fetchProducts();
-  }, [selectedTool, selectedCategory, priceRange, page]);
+    Object.entries(merged).forEach(([key, value]) => {
+      if (value && value !== "All" && value !== "1") {
+        newParams.set(key, value);
+      }
+    });
+
+    const query = newParams.toString();
+    return query ? `?${query}` : "";
+  };
 
   return (
     <>
@@ -97,12 +118,9 @@ export default function Products() {
               </label>
               <div className="flex flex-wrap gap-2">
                 {tools.map((tool) => (
-                  <button
+                  <Link
                     key={tool}
-                    onClick={() => {
-                      setSelectedTool(tool);
-                      setPage(1);
-                    }}
+                    href={`/products${buildQueryString({ tool, page: "1" })}`}
                     className={`px-4 py-2 rounded-lg font-medium transition-all ${
                       selectedTool === tool
                         ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900"
@@ -110,7 +128,7 @@ export default function Products() {
                     }`}
                   >
                     {tool}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -120,20 +138,24 @@ export default function Products() {
               <label className="block text-sm font-semibold text-zinc-900 dark:text-white mb-2">
                 Category
               </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  setPage(1);
-                }}
-                className="w-full px-4 py-2 rounded-lg border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:border-zinc-900 dark:focus:border-white focus:outline-none"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={selectedCategory}
+                  //   onChange={(e) => {
+                  //     window.location.href = `/products${buildQueryString({
+                  //       category: e.target.value,
+                  //       page: "1",
+                  //     })}`;
+                  //   }}
+                  className="w-full px-4 py-2 rounded-lg border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:border-zinc-900 dark:focus:border-white focus:outline-none"
+                >
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Price Filter */}
@@ -141,19 +163,23 @@ export default function Products() {
               <label className="block text-sm font-semibold text-zinc-900 dark:text-white mb-2">
                 Price Range
               </label>
-              <select
-                value={priceRange}
-                onChange={(e) => {
-                  setPriceRange(e.target.value);
-                  setPage(1);
-                }}
-                className="w-full px-4 py-2 rounded-lg border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:border-zinc-900 dark:focus:border-white focus:outline-none"
-              >
-                <option value="All">All Prices</option>
-                <option value="0-150">Under $150</option>
-                <option value="150-200">$150 - $200</option>
-                <option value="200+">$200+</option>
-              </select>
+              <div className="relative">
+                <select
+                  value={priceRange}
+                  //   onChange={(e) => {
+                  //     window.location.href = `/products${buildQueryString({
+                  //       priceRange: e.target.value,
+                  //       page: "1",
+                  //     })}`;
+                  //   }}
+                  className="w-full px-4 py-2 rounded-lg border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:border-zinc-900 dark:focus:border-white focus:outline-none"
+                >
+                  <option value="All">All Prices</option>
+                  <option value="0-150">Under $150</option>
+                  <option value="150-200">$150 - $200</option>
+                  <option value="200+">$200+</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -162,13 +188,7 @@ export default function Products() {
       {/* Products Grid */}
       <section className="py-16 bg-zinc-50 dark:bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {loading ? (
-            <div className="text-center py-12">
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Loading products...
-              </p>
-            </div>
-          ) : products.length === 0 ? (
+          {products.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-zinc-600 dark:text-zinc-400">
                 No products found with the selected filters.
@@ -214,23 +234,37 @@ export default function Products() {
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center gap-2">
-                  <button
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    disabled={page === 1}
-                    className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
-                  >
-                    Previous
-                  </button>
+                  {page > 1 ? (
+                    <Link
+                      href={`/products${buildQueryString({
+                        page: (page - 1).toString(),
+                      })}`}
+                      className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
+                    >
+                      Previous
+                    </Link>
+                  ) : (
+                    <span className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium opacity-50 cursor-not-allowed">
+                      Previous
+                    </span>
+                  )}
                   <span className="px-4 py-2 text-zinc-900 dark:text-white">
                     Page {page} of {totalPages}
                   </span>
-                  <button
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={page === totalPages}
-                    className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
-                  >
-                    Next
-                  </button>
+                  {page < totalPages ? (
+                    <Link
+                      href={`/products${buildQueryString({
+                        page: (page + 1).toString(),
+                      })}`}
+                      className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
+                    >
+                      Next
+                    </Link>
+                  ) : (
+                    <span className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium opacity-50 cursor-not-allowed">
+                      Next
+                    </span>
+                  )}
                 </div>
               )}
             </>

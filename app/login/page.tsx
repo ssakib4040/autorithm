@@ -27,8 +27,10 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(result.user));
 
       router.push("/profile");
-    } catch (err: any) {
-      setError(err.message || "Invalid email or password");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Invalid email or password"
+      );
     } finally {
       setIsLoading(false);
     }

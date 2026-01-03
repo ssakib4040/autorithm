@@ -11,10 +11,10 @@ interface ProductDetailProps {
 export async function generateStaticParams() {
   try {
     const data = await productsApi.getAll({ limit: 100 });
-    return data.products.map((product: any) => ({
+    return data.products.map((product) => ({
       slug: product.slug,
     }));
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -25,7 +25,7 @@ export default async function ProductDetail({ params }: ProductDetailProps) {
   let product;
   try {
     product = await productsApi.getBySlug(slug);
-  } catch (error) {
+  } catch {
     notFound();
   }
 
