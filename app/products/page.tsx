@@ -146,8 +146,9 @@ export default async function Products({ searchParams }: ProductsPageProps) {
             <>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 {products.map((product) => (
-                  <div
+                  <Link
                     key={product.id}
+                    href={`/products/${product.slug}`}
                     className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all hover:shadow-lg"
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -176,14 +177,14 @@ export default async function Products({ searchParams }: ProductsPageProps) {
                       <span className="text-2xl font-bold text-zinc-900 dark:text-white">
                         ${product.price}
                       </span>
-                      <Link
-                        href={`/products/${product.slug}`}
+                      <div
+                        // href={`/products/${product.slug}`}
                         className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
                       >
                         View Details
-                      </Link>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
 
