@@ -1,19 +1,8 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import Head from "next/head";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getFeaturedProducts } from "@/data/products";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 // Get featured products
 const featuredProducts = getFeaturedProducts(6);
@@ -48,7 +37,7 @@ const useCases = [
 
 export default function Home() {
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+    <div >
       <Head>
         <title>Autorithm - Premium Automation Marketplace</title>
         <meta

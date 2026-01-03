@@ -2,18 +2,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { productsApi } from "@/utils/api";
+import Filters from "./partials/Filters";
 
-const categories = [
-  "All",
-  "CRM",
-  "Marketing",
-  "SaaS Ops",
-  "E-commerce",
-  "Support",
-  "Analytics",
-  "Document Management",
-  "Finance",
-];
 const tools = ["All", "n8n", "Make"];
 
 interface Product {
@@ -133,54 +123,12 @@ export default async function Products({ searchParams }: ProductsPageProps) {
               </div>
             </div>
 
-            {/* Category Filter */}
-            <div className="flex-1">
-              <label className="block text-sm font-semibold text-zinc-900 dark:text-white mb-2">
-                Category
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedCategory}
-                  //   onChange={(e) => {
-                  //     window.location.href = `/products${buildQueryString({
-                  //       category: e.target.value,
-                  //       page: "1",
-                  //     })}`;
-                  //   }}
-                  className="w-full px-4 py-2 rounded-lg border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:border-zinc-900 dark:focus:border-white focus:outline-none"
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Price Filter */}
-            <div className="flex-1">
-              <label className="block text-sm font-semibold text-zinc-900 dark:text-white mb-2">
-                Price Range
-              </label>
-              <div className="relative">
-                <select
-                  value={priceRange}
-                  //   onChange={(e) => {
-                  //     window.location.href = `/products${buildQueryString({
-                  //       priceRange: e.target.value,
-                  //       page: "1",
-                  //     })}`;
-                  //   }}
-                  className="w-full px-4 py-2 rounded-lg border-2 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:border-zinc-900 dark:focus:border-white focus:outline-none"
-                >
-                  <option value="All">All Prices</option>
-                  <option value="0-150">Under $150</option>
-                  <option value="150-200">$150 - $200</option>
-                  <option value="200+">$200+</option>
-                </select>
-              </div>
-            </div>
+            <Filters
+              selectedCategory={selectedCategory}
+              priceRange={priceRange}
+              selectedTool={selectedTool}
+              page={page}
+            />
           </div>
         </div>
       </section>
