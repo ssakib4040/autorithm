@@ -1,7 +1,19 @@
+import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import Head from "next/head";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getFeaturedProducts } from "@/data/products";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 // Get featured products
 const featuredProducts = getFeaturedProducts(6);
@@ -36,7 +48,14 @@ const useCases = [
 
 export default function Home() {
   return (
-    <>
+    <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+      <Head>
+        <title>Autorithm - Premium Automation Marketplace</title>
+        <meta
+          name="description"
+          content="Pre-built automation workflows for n8n and Make.com. Save hours of development time with our premium automation kits."
+        />
+      </Head>
       <Header />
 
       {/* Hero Section */}
@@ -71,6 +90,7 @@ export default function Home() {
               {/* Abstract automation flow visual */}
               <div className="relative h-100 flex items-center justify-center">
                 <svg viewBox="0 0 400 400" className="w-full h-full">
+                  {/* Connection lines */}
                   <line
                     x1="80"
                     y1="100"
@@ -81,10 +101,10 @@ export default function Home() {
                     className="text-zinc-300 dark:text-zinc-700"
                   />
                   <line
-                    x1="200"
-                    y1="200"
-                    x2="320"
-                    y2="100"
+                    x1="320"
+                    y1="100"
+                    x2="200"
+                    y2="200"
                     stroke="currentColor"
                     strokeWidth="2"
                     className="text-zinc-300 dark:text-zinc-700"
@@ -92,7 +112,7 @@ export default function Home() {
                   <line
                     x1="200"
                     y1="200"
-                    x2="320"
+                    x2="200"
                     y2="300"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -103,21 +123,65 @@ export default function Home() {
                   <circle
                     cx="80"
                     cy="100"
-                    r="20"
-                    className="fill-zinc-900 dark:fill-white"
+                    r="30"
+                    fill="currentColor"
+                    className="text-blue-500"
+                    opacity="0.2"
                   />
-                  <circle cx="200" cy="200" r="24" className="fill-blue-500" />
+                  <circle
+                    cx="80"
+                    cy="100"
+                    r="20"
+                    fill="currentColor"
+                    className="text-blue-500"
+                  />
+
+                  <circle
+                    cx="320"
+                    cy="100"
+                    r="30"
+                    fill="currentColor"
+                    className="text-purple-500"
+                    opacity="0.2"
+                  />
                   <circle
                     cx="320"
                     cy="100"
                     r="20"
-                    className="fill-zinc-900 dark:fill-white"
+                    fill="currentColor"
+                    className="text-purple-500"
+                  />
+
+                  <circle
+                    cx="200"
+                    cy="200"
+                    r="40"
+                    fill="currentColor"
+                    className="text-emerald-500"
+                    opacity="0.2"
                   />
                   <circle
-                    cx="320"
+                    cx="200"
+                    cy="200"
+                    r="28"
+                    fill="currentColor"
+                    className="text-emerald-500"
+                  />
+
+                  <circle
+                    cx="200"
                     cy="300"
-                    r="20"
-                    className="fill-zinc-900 dark:fill-white"
+                    r="35"
+                    fill="currentColor"
+                    className="text-orange-500"
+                    opacity="0.2"
+                  />
+                  <circle
+                    cx="200"
+                    cy="300"
+                    r="24"
+                    fill="currentColor"
+                    className="text-orange-500"
                   />
                 </svg>
               </div>
@@ -126,76 +190,352 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 bg-zinc-900 dark:bg-black">
+      {/* What We Do */}
+      <section className="py-24 bg-white dark:bg-zinc-900" id="services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <p className="text-5xl font-bold text-white mb-2">50+</p>
-              <p className="text-zinc-400">Ready-to-Use Workflows</p>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              What We Do
+            </h2>
+            <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+              Three ways to transform your operations with professional
+              automation
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Automation Kits */}
+            <div className="p-8 rounded-2xl border-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all">
+              <div className="w-12 h-12 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-3">
+                Automation Kits
+              </h3>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                Ready-to-deploy workflow templates for common business
+                processes. Install in minutes, customize to your needs, start
+                seeing results immediately.
+              </p>
+              <Link
+                href="#products"
+                className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+              >
+                Browse Kits →
+              </Link>
             </div>
-            <div>
-              <p className="text-5xl font-bold text-white mb-2">10K+</p>
-              <p className="text-zinc-400">Hours Saved</p>
+
+            {/* Custom Automation */}
+            <div className="p-8 rounded-2xl border-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all">
+              <div className="w-12 h-12 rounded-lg bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-purple-600 dark:text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-3">
+                Custom Automation
+              </h3>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                Bespoke automation systems designed specifically for your
+                workflows. From requirements to deployment, we handle the entire
+                build process.
+              </p>
+              <Link
+                href="#contact"
+                className="text-purple-600 dark:text-purple-400 font-semibold hover:underline"
+              >
+                Start a Project →
+              </Link>
             </div>
+
+            {/* Managed Automation */}
+            <div className="p-8 rounded-2xl border-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all">
+              <div className="w-12 h-12 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center mb-6">
+                <svg
+                  className="w-6 h-6 text-emerald-600 dark:text-emerald-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-3">
+                Managed Automation
+              </h3>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                Ongoing maintenance, monitoring, and optimization for your
+                automation infrastructure. Focus on your business while we keep
+                everything running smoothly.
+              </p>
+              <Link
+                href="#contact"
+                className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+              >
+                Learn More →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* n8n & Make.com Focus */}
+      <section className="py-24 bg-zinc-50 dark:bg-zinc-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-5xl font-bold text-white mb-2">99.9%</p>
-              <p className="text-zinc-400">Reliability Score</p>
+              <h2 className="text-4xl font-bold text-zinc-900 dark:text-white mb-6">
+                Why n8n & Make.com?
+              </h2>
+              <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
+                These platforms are incredibly powerful—they can connect
+                virtually any tool, process complex logic, and scale to
+                enterprise workloads.
+              </p>
+              <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
+                But power without structure leads to brittle automations that
+                break in production, lack proper error handling, and become
+                impossible to maintain.
+              </p>
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-1">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-zinc-900 dark:text-white mb-1">
+                      Comprehensive Error Handling
+                    </h3>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      Every failure scenario mapped and handled gracefully
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-1">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-zinc-900 dark:text-white mb-1">
+                      Modular Logic Architecture
+                    </h3>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      Clean, reusable components that are easy to update
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-1">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-zinc-900 dark:text-white mb-1">
+                      Built for Scale
+                    </h3>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      Performance optimized to handle growing data volumes
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-1">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-zinc-900 dark:text-white mb-1">
+                      Production-Ready from Day One
+                    </h3>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      Thoroughly tested and documented for immediate deployment
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="#products"
+                  className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors text-center"
+                >
+                  View n8n Templates
+                </Link>
+                <Link
+                  href="#products"
+                  className="px-6 py-3 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 transition-colors text-center"
+                >
+                  View Make Templates
+                </Link>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+                The Autorithm Approach
+              </h3>
+              <div className="space-y-6">
+                <div>
+                  <div className="font-mono text-sm text-blue-600 dark:text-blue-400 mb-2">
+                    01. Architecture
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400">
+                    Every workflow follows proven patterns for reliability and
+                    maintainability
+                  </p>
+                </div>
+                <div>
+                  <div className="font-mono text-sm text-purple-600 dark:text-purple-400 mb-2">
+                    02. Documentation
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400">
+                    Clear setup guides, configuration instructions, and
+                    troubleshooting steps
+                  </p>
+                </div>
+                <div>
+                  <div className="font-mono text-sm text-emerald-600 dark:text-emerald-400 mb-2">
+                    03. Testing
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400">
+                    Validated against real-world scenarios and edge cases before
+                    release
+                  </p>
+                </div>
+                <div>
+                  <div className="font-mono text-sm text-orange-600 dark:text-orange-400 mb-2">
+                    04. Support
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400">
+                    Ongoing updates and assistance to ensure long-term success
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="py-24 bg-white dark:bg-zinc-900">
+      <section className="py-24 bg-white dark:bg-zinc-900" id="products">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-zinc-900 dark:text-white mb-4">
               Featured Automation Kits
             </h2>
             <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-              Browse our most popular workflows or request a custom solution
-              tailored to your needs
+              Production-ready workflows that solve real business problems
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map((product) => (
-              <Link
+              <div
                 key={product.id}
-                href={`/products/${product.slug}`}
-                className="group"
+                className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all hover:shadow-lg"
               >
-                <div className="h-full p-6 rounded-xl border-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-900 dark:hover:border-white transition-all bg-white dark:bg-zinc-800">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="px-3 py-1 text-sm font-medium rounded-full bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300">
-                      {product.tool}
-                    </span>
-                    <span className="text-2xl font-bold text-zinc-900 dark:text-white">
-                      ${product.price}
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-zinc-500 dark:text-zinc-500">
-                      {product.category}
-                    </span>
-                    <span className="text-sm font-medium text-zinc-900 dark:text-white group-hover:translate-x-1 transition-transform">
-                      Learn more →
-                    </span>
-                  </div>
+                <div className="flex items-center justify-between mb-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      product.tool === "n8n"
+                        ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                        : "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
+                    }`}
+                  >
+                    {product.tool}
+                  </span>
+                  <span className="text-2xl font-bold text-zinc-900 dark:text-white">
+                    ${product.price}
+                  </span>
                 </div>
-              </Link>
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                  {product.name}
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                  {product.description}
+                </p>
+                <Link
+                  href={`/products/${product.id}`}
+                  className="block w-full px-4 py-3 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors text-center"
+                >
+                  View Details
+                </Link>
+              </div>
             ))}
           </div>
-          <div className="text-center">
+          <div className="text-center mt-12">
             <Link
               href="/products"
-              className="inline-flex items-center px-6 py-3 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
+              className="inline-block px-8 py-4 rounded-lg border-2 border-zinc-900 dark:border-white text-zinc-900 dark:text-white font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             >
               View All Products
             </Link>
@@ -203,53 +543,110 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-24 bg-zinc-50 dark:bg-zinc-950">
+      {/* Why Autorithm */}
+      <section className="py-24 bg-zinc-50 dark:bg-zinc-950" id="about">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-zinc-900 dark:text-white mb-4">
-              How Autorithm Works
+              Why Choose Autorithm?
             </h2>
             <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-              From purchase to production in minutes
+              The difference between cheap templates and professional automation
+              systems
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-zinc-900 dark:bg-white rounded-full flex items-center justify-center text-2xl font-bold text-white dark:text-zinc-900 mx-auto mb-6">
-                1
-              </div>
-              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
-                Choose Your Kit
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <div>
+              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-6">
+                ✓ Autorithm Systems
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Browse our marketplace and select the automation workflow that
-                fits your needs, or request a custom build.
-              </p>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <span className="text-emerald-500 mt-1">✓</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
+                    <strong>Bulletproof error handling</strong> - Every edge
+                    case covered
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-emerald-500 mt-1">✓</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
+                    <strong>Complete documentation</strong> - Setup guides and
+                    configuration instructions
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-emerald-500 mt-1">✓</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
+                    <strong>Production-tested</strong> - Validated in real-world
+                    environments
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-emerald-500 mt-1">✓</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
+                    <strong>Modular architecture</strong> - Easy to customize
+                    and extend
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-emerald-500 mt-1">✓</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
+                    <strong>Ongoing support</strong> - Updates and assistance
+                    when you need it
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-emerald-500 mt-1">✓</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
+                    <strong>Built for scale</strong> - Handle growing workloads
+                    without refactoring
+                  </span>
+                </li>
+              </ul>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-zinc-900 dark:bg-white rounded-full flex items-center justify-center text-2xl font-bold text-white dark:text-zinc-900 mx-auto mb-6">
-                2
-              </div>
-              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
-                Import & Configure
+            <div>
+              <h3 className="text-2xl font-semibold text-zinc-400 dark:text-zinc-600 mb-6">
+                ✗ Cheap Templates
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Import the workflow JSON into n8n or Make.com, then customize
-                with your API keys and credentials.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-zinc-900 dark:bg-white rounded-full flex items-center justify-center text-2xl font-bold text-white dark:text-zinc-900 mx-auto mb-6">
-                3
-              </div>
-              <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
-                Deploy & Scale
-              </h3>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Activate your automation and watch it work. Get free support for
-                setup questions and scaling.
-              </p>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    Break on unexpected inputs and edge cases
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    Minimal or no documentation provided
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    Demo workflows that fail in production
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    Monolithic design that&apos;s hard to modify
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    No support after purchase
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-500 mt-1">✗</span>
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    Performance issues at scale
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -299,13 +696,13 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/products"
+              href="#products"
               className="px-8 py-4 rounded-lg bg-white text-zinc-900 font-semibold hover:bg-zinc-200 transition-colors text-center"
             >
               Explore Products
             </Link>
             <Link
-              href="/contact"
+              href="#contact"
               className="px-8 py-4 rounded-lg border-2 border-white text-white font-semibold hover:bg-white hover:text-zinc-900 transition-colors text-center"
             >
               Book Custom Automation
@@ -324,6 +721,6 @@ export default function Home() {
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 }
