@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 
 export default function Header() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   return (
     <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
@@ -47,7 +47,7 @@ export default function Header() {
               Contact
             </Link>
 
-            {session ? (
+            {true ? (
               <Link
                 href="/profile"
                 className="px-4 py-2 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors"
