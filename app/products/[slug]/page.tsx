@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { productsApi } from "@/utils/api";
 import { notFound } from "next/navigation";
+import { Product } from "@/types/product";
 
 type Platform = "n8n" | "make";
 
@@ -146,17 +147,16 @@ export default async function ProductDetails({
       },
     ],
   };
-  console.log(await searchParams);
-  // const currentPlatform = product.platforms["n8n"];
 
-  const temp_product: any = await productsApi.getBySlug(`${slug}?tool=${tool}`);
-  console.log(temp_product);
+  const response = await productsApi.getBySlug(`${slug}?tool=${tool}`);
+  console.log("response => ", response);
 
-  console.log("not found called => ", temp_product);
-
-  if (temp_product?.status === 404) {
+  if ("status" in response && response.status === 404) {
     notFound();
   }
+
+  // After notFound() check, response is the Product with relatedVersions
+  const temp_product = response as Product;
 
   return (
     <>
@@ -167,7 +167,7 @@ export default async function ProductDetails({
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-950 border-t-2 border-zinc-200 dark:border-zinc-800 p-4 z-50 shadow-2xl">
           <div className="flex items-center justify-between gap-4">
             <div>
-              {temp_product?.discount ? (
+              {temp_product.discount ? (
                 <>
                   <div className="flex items-center gap-2 mb-1">
                     <div className="text-2xl font-bold text-zinc-900 dark:text-white">
@@ -202,7 +202,7 @@ export default async function ProductDetails({
                   </div>
                   <div className="text-xs text-zinc-600 dark:text-zinc-400">
                     {temp_product.tool === "n8n" ? "n8n" : "Make.com"} •{" "}
-                    {temp_product.difficulty}
+                    {temp_product.technicalDetails.complexity}
                   </div>
                 </>
               )}
@@ -277,24 +277,29 @@ export default async function ProductDetails({
                   How It Works
                 </h2>
                 <div className="space-y-4">
-                  {temp_product.howItWorks.map((step: any, index: string) => (
-                    <div
-                      key={index}
-                      className="flex gap-4 p-5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800"
-                    >
-                      <div className="shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
-                        {index + 1}
+                  {temp_product.howItWorks.map(
+                    (
+                      step: { title: string; description: string },
+                      index: number
+                    ) => (
+                      <div
+                        key={index}
+                        className="flex gap-4 p-5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800"
+                      >
+                        <div className="shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
+                          {index + 1}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-1">
+                            {step.title}
+                          </h3>
+                          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                            {step.description}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-1">
-                          {step.title}
-                        </h3>
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </div>
 
@@ -304,26 +309,28 @@ export default async function ProductDetails({
                   Key Features
                 </h2>
                 <ul className="space-y-2">
-                  {temp_product.keyFeatures.map((feature: any, index: any) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-zinc-700 dark:text-zinc-300">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
+                  {temp_product.keyFeatures.map(
+                    (feature: string, index: number) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <svg
+                          className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        <span className="text-zinc-700 dark:text-zinc-300">
+                          {feature}
+                        </span>
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
 
@@ -363,7 +370,7 @@ export default async function ProductDetails({
                     </h3>
                     <ul className="space-y-0.5">
                       {temp_product.technicalDetails.requirements.map(
-                        (assumption: any, index: any) => (
+                        (assumption: string, index: number) => (
                           <li
                             key={index}
                             className="text-zinc-700 dark:text-zinc-300 text-xs"
@@ -426,7 +433,7 @@ export default async function ProductDetails({
               {/* CTA CARD */}
               <div className="p-8 rounded-2xl bg-white dark:bg-zinc-950 border-2 border-zinc-200 dark:border-zinc-800">
                 <div className="mb-6">
-                  {temp_product?.discount ? (
+                  {temp_product.discount ? (
                     <>
                       {/* Discount Badge */}
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 mb-4">

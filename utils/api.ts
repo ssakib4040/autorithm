@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { Product, ErrorResponse } from "@/types/product";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -6,16 +6,6 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
   console.log(
     "WARNING: NEXT_PUBLIC_API_URL is not set. Falling back to default localhost URL."
   );
-}
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  tool: "n8n" | "Make";
-  category: string;
-  price: number;
-  slug: string;
 }
 
 interface User {
@@ -52,12 +42,9 @@ export const productsApi = {
   },
 
   getBySlug: (slug: string) => {
-    return apiRequest<{
-      name: ReactNode;
-      category: ReactNode;
-      product: Product;
-      relatedVersions: Product[];
-    }>(`/products/${slug}`, {
+    return apiRequest<
+      (Product & { relatedVersions: Product[] }) | ErrorResponse
+    >(`/products/${slug}`, {
       cache: "force-cache",
     });
   },

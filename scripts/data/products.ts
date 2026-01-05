@@ -1,30 +1,4 @@
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  tool: "n8n" | "Make";
-  category: string;
-  price: number;
-  slug: string; // Same slug = same product group across platforms
-  discounts?: {
-    percentage: number;
-    reason: string;
-    startDate: Date;
-    expiresAt: Date;
-  }[];
-  keyFeatures: string[];
-  howItWorks?: {
-    title: string;
-    description: string;
-  }[];
-  technicalDetails: {
-    complexity: string;
-    setupTime: string;
-    apis: string[];
-    requirements: string[];
-  };
-  whatsIncluded: string[];
-}
+import { Product } from "@/types/product";
 
 export const allProducts: Product[] = [
   {

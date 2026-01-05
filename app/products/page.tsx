@@ -3,18 +3,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { productsApi } from "@/utils/api";
 import Filters from "./partials/Filters";
+import { Product } from "@/types/product";
 
 const tools = ["All", "n8n", "Make"];
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  tool: "n8n" | "Make";
-  category: string;
-  price: number;
-  slug: string;
-}
 
 interface ProductsPageProps {
   searchParams: Promise<{
