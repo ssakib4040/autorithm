@@ -5,6 +5,7 @@ declare module "next-auth" {
     id: string;
     email: string;
     name: string;
+    isAdmin?: boolean;
     purchasedProducts: number[];
   }
 
@@ -13,6 +14,7 @@ declare module "next-auth" {
       id: string;
       email: string;
       name: string;
+      isAdmin?: boolean;
       purchasedProducts: number[];
     };
   }
@@ -21,6 +23,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
+    isAdmin?: boolean;
     purchasedProducts: number[];
   }
 }

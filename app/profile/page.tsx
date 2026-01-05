@@ -53,7 +53,7 @@ export default function Profile() {
                   {user?.email}
                 </p>
               </div>
-              {(user as unknown)?.isAdmin && (
+              {user?.isAdmin && (
                 <div>
                   <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">
                     Admin

@@ -4,13 +4,13 @@ import Link from "next/link";
 
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function Login() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -142,5 +142,13 @@ export default function Login() {
 
       <Footer />
     </>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

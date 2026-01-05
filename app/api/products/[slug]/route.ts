@@ -117,7 +117,7 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const authResult = await requireAdmin(request);
+    const authResult = await requireAdmin();
     if (authResult instanceof NextResponse) {
       return authResult;
     }
@@ -165,7 +165,7 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const authResult = await requireAdmin(request);
+    const authResult = await requireAdmin();
     if (authResult instanceof NextResponse) {
       return authResult;
     }
