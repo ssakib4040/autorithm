@@ -13,20 +13,11 @@ export async function GET(
 ) {
   try {
     // Require authentication
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
     if (authResult instanceof NextResponse) {
       return authResult;
     }
     const authenticatedUser = authResult;
-
-    // Get authenticated user from database
-    const dbUser = await db
-      .collection("users")
-      .findOne({ email: authenticatedUser.email });
-
-    if (!dbUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
 
     const { id } = await params;
     const collection = db.collection("purchases");
@@ -72,8 +63,8 @@ export async function GET(
 
     // Check if user owns this purchase (unless admin)
     if (
-      !dbUser.isAdmin &&
-      purchase[0].purchasedBy.toString() !== dbUser._id.toString()
+      !authenticatedUser.isAdmin &&
+      purchase[0].purchasedBy.toString() !== authenticatedUser.id
     ) {
       return NextResponse.json(
         { error: "Forbidden: You can only view your own purchases" },
@@ -105,20 +96,11 @@ export async function DELETE(
 ) {
   try {
     // Require authentication
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
     if (authResult instanceof NextResponse) {
       return authResult;
     }
     const authenticatedUser = authResult;
-
-    // Get authenticated user from database
-    const dbUser = await db
-      .collection("users")
-      .findOne({ email: authenticatedUser.email });
-
-    if (!dbUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
 
     const { id } = await params;
     const collection = db.collection("purchases");
@@ -135,8 +117,8 @@ export async function DELETE(
 
     // Check ownership (unless admin)
     if (
-      !dbUser.isAdmin &&
-      purchase.purchasedBy.toString() !== dbUser._id.toString()
+      !authenticatedUser.isAdmin &&
+      purchase.purchasedBy.toString() !== authenticatedUser.id
     ) {
       return NextResponse.json(
         { error: "Forbidden: You can only delete your own purchases" },

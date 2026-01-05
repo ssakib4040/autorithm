@@ -1,52 +1,48 @@
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
-import db from "./mongodb";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export interface AuthUser {
+  id: string;
   email: string;
   name: string;
   isAdmin?: boolean;
 }
 
-export async function verifyToken(request: Request): Promise<AuthUser | null> {
+export async function getSession(): Promise<AuthUser | null> {
   try {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
       return null;
     }
 
-    const token = authHeader.substring(7);
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "fallback-secret"
-    ) as AuthUser;
-
-    return decoded;
-  } catch (error) {
+    return {
+      id: (session.user as { id?: string }).id || "",
+      email: session.user.email!,
+      name: session.user.name!,
+      isAdmin: (session.user as { isAdmin?: boolean }).isAdmin || false,
+    };
+  } catch {
     return null;
   }
 }
 
-export async function requireAuth(request: Request) {
-  const user = await verifyToken(request);
+export async function requireAuth() {
+  const user = await getSession();
   if (!user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
   return user;
 }
 
-export async function requireAdmin(request: Request) {
-  const user = await verifyToken(request);
+export async function requireAdmin() {
+  const user = await getSession();
   if (!user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  // Fetch user from database to check admin status
-  const dbUser = await db
-    .collection("users")
-    .findOne({ email: user.email }, { projection: { isAdmin: 1 } });
-
-  if (!dbUser || !dbUser.isAdmin) {
+  if (!user.isAdmin) {
     return NextResponse.json(
       { message: "Forbidden: Admin access required" },
       { status: 403 }

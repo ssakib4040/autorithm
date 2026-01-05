@@ -1,18 +1,25 @@
 "use client";
 
-import { useState, FormEvent } from "react";
 import Link from "next/link";
+
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState, FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { authApi } from "@/utils/api";
 
 export default function Login() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,17 +27,22 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const result = await authApi.login({ email, password });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/profile",
+      });
 
-      // Store token in localStorage
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
-
-      router.push("/profile");
+      if (result?.error) {
+        console.log("Login error:", result);
+        setError(result?.error || "Something went wrong");
+      } else if (result?.ok) {
+        // Force a hard navigation to ensure session is loaded
+        router.push(callbackUrl || "/");
+      }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Invalid email or password"
-      );
+      setError("An error occurred during login");
     } finally {
       setIsLoading(false);
     }

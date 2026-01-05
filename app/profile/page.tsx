@@ -1,48 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-interface User {
-  email: string;
-  name: string;
-  isAdmin?: boolean;
-}
-
 export default function Profile() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window === "undefined") return null;
+  const { data: session, status } = useSession();
 
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
-
-    if (!token || !userData) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(userData) as User;
-    } catch {
-      return null;
-    }
-  });
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
     router.push("/login");
   };
 
-  if (!user) {
+  if (status === "loading") {
     return (
       <>
         <Header />
@@ -52,6 +24,8 @@ export default function Profile() {
       </>
     );
   }
+
+  const user = session?.user;
 
   return (
     <>
@@ -68,7 +42,7 @@ export default function Profile() {
               <div>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">Name</p>
                 <p className="text-lg font-semibold text-zinc-900 dark:text-white">
-                  {user.name}
+                  {user?.name}
                 </p>
               </div>
               <div>
@@ -76,10 +50,10 @@ export default function Profile() {
                   Email
                 </p>
                 <p className="text-lg font-semibold text-zinc-900 dark:text-white">
-                  {user.email}
+                  {user?.email}
                 </p>
               </div>
-              {user.isAdmin && (
+              {(user as unknown)?.isAdmin && (
                 <div>
                   <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">
                     Admin

@@ -13,20 +13,11 @@ import { requireAuth } from "@/lib/auth";
 export async function GET(request: NextRequest) {
   try {
     // Require authentication
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
     if (authResult instanceof NextResponse) {
       return authResult;
     }
     const authenticatedUser = authResult;
-
-    // Get authenticated user from database
-    const dbUser = await db
-      .collection("users")
-      .findOne({ email: authenticatedUser.email });
-
-    if (!dbUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
 
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
@@ -37,8 +28,8 @@ export async function GET(request: NextRequest) {
     const matchFilter: Record<string, unknown> = {};
 
     // Non-admin users can only see their own stats
-    if (!dbUser.isAdmin) {
-      matchFilter.purchasedBy = dbUser._id;
+    if (!authenticatedUser.isAdmin) {
+      matchFilter.purchasedBy = new ObjectId(authenticatedUser.id);
     } else if (userId) {
       // Admins can filter by userId if provided
       matchFilter.purchasedBy = new ObjectId(userId);

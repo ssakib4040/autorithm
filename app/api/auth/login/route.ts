@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import db from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     // Find user in database
     const user = await db
       .collection("users")
-      .findOne({ email: email.toLowerCase() }, { projection: { _id: 0 } });
+      .findOne({ email: email.toLowerCase() });
 
     if (!user) {
       return NextResponse.json(
@@ -46,6 +47,37 @@ export async function POST(request: Request) {
       process.env.JWT_SECRET || "fallback-secret",
       { expiresIn: "7d" }
     );
+
+    // Store session in database
+    const sessionsCollection = db.collection("sessions");
+
+    // Get next session ID
+    const lastSession = await sessionsCollection
+      .find({})
+      .sort({ id: -1 })
+      .limit(1)
+      .toArray();
+    const nextId = lastSession.length > 0 ? lastSession[0].id + 1 : 1;
+
+    // Extract request metadata
+    const ipAddress =
+      request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+    const userAgent = request.headers.get("user-agent") || "unknown";
+
+    const session = {
+      id: nextId,
+      token: crypto.createHash("sha256").update(token).digest("hex"), // Store hashed token for security
+      userId: user._id.toString(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      createdAt: new Date(),
+      lastActiveAt: new Date(),
+      ipAddress,
+      userAgent,
+    };
+
+    await sessionsCollection.insertOne(session);
 
     // Return user data (excluding password)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
