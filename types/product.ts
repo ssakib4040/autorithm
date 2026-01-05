@@ -28,7 +28,7 @@ export interface Product {
     apis: string[];
     requirements: string[];
   };
-  whatsIncluded?: string[];
+  whatsIncluded: string[];
 }
 
 export interface ProductDetailResponse {
