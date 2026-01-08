@@ -3,6 +3,18 @@ import db from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 
+import {
+  getAuthenticatedUser,
+  lemonSqueezySetup,
+} from "@lemonsqueezy/lemonsqueezy.js";
+
+const apiKey = process.env.LEMONSQUEEZY_API_KEY;
+
+lemonSqueezySetup({
+  apiKey,
+  onError: (error) => console.error("Error!", error),
+});
+
 // POST /api/products/create - Create a new product (Admin only)
 export async function POST(request: Request) {
   try {
@@ -13,7 +25,6 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json().catch(() => ({}));
-    console.log("body =>", body);
     const {
       name,
       slug,
@@ -26,6 +37,8 @@ export async function POST(request: Request) {
       whatsIncluded,
       technicalDetails,
       discounts,
+      lemonSqueezyProductId,
+      lemonSqueezyVariantId,
     } = body;
 
     // Validate required fields
@@ -56,6 +69,26 @@ export async function POST(request: Request) {
       );
     }
 
+    const { data, error } = await getAuthenticatedUser();
+
+    if (error) {
+      console.error("Lemon Squeezy auth error:", error);
+      return NextResponse.json(
+        { message: "Failed to authenticate with Lemon Squeezy" },
+        { status: 500 }
+      );
+    }
+
+    console.log("error => ", error);
+    console.log("data => ", data);
+
+    return;
+
+    // Note: Lemon Squeezy SDK does not support product creation via API.
+    // Products and variants must be created manually in the Lemon Squeezy dashboard.
+    // You can optionally provide lemonSqueezyProductId and lemonSqueezyVariantId
+    // to link this MongoDB product with an existing Lemon Squeezy product.
+
     // Get next ID for MongoDB
     const lastProduct = await db
       .collection("products")
@@ -84,6 +117,7 @@ export async function POST(request: Request) {
         requirements: [],
       },
       discounts: discounts || [],
+
       createdAt: new Date(),
       updatedAt: new Date(),
     };

@@ -1,45 +1,54 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { headers } from "next/headers";
+import jwt from "jsonwebtoken";
 
 export interface AuthUser {
-  id: string;
   email: string;
   name: string;
   isAdmin?: boolean;
 }
 
-export async function getSession(): Promise<AuthUser | null> {
+async function verifyToken(): Promise<AuthUser | null> {
   try {
-    const session = await getServerSession(authOptions);
+    const headersList = await headers();
+    const authorization = headersList.get("authorization");
 
-    if (!session || !session.user) {
+    if (!authorization || !authorization.startsWith("Bearer ")) {
       return null;
     }
 
-    return {
-      id: (session.user as { id?: string }).id || "",
-      email: session.user.email!,
-      name: session.user.name!,
-      isAdmin: (session.user as { isAdmin?: boolean }).isAdmin || false,
-    };
-  } catch {
+    const token = authorization.substring(7); // Remove "Bearer " prefix
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "fallback-secret"
+    ) as AuthUser;
+
+    return decoded;
+  } catch (error) {
+    console.error("Token verification failed:", error);
     return null;
   }
 }
 
 export async function requireAuth() {
-  const user = await getSession();
+  const user = await verifyToken();
   if (!user) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Unauthorized: Valid Bearer token required" },
+      { status: 401 }
+    );
   }
   return user;
 }
 
 export async function requireAdmin() {
-  const user = await getSession();
+  const user = await verifyToken();
   if (!user) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Unauthorized: Valid Bearer token required" },
+      { status: 401 }
+    );
   }
 
   if (!user.isAdmin) {
